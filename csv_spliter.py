@@ -1,4 +1,3 @@
-
 import csv
 import re
 
@@ -12,15 +11,13 @@ print "                                  /_/                         "
 print">>>========================== \\\\ ==========================<<<"
 
 
-
 print "The splitter takes big CSV files and cuts them into littler, cuter ones."
 print "NOTE: The splitter doesn't maintain the order of your files, so just give up. Also make sure you've got a header row."
 print ""
 print "Copy csv file as path and paste below."
 
 
-
-csv_path = str(input("Where's your tuber? Full path (in quotes), please: ").strip('"'))
+csv_path = str(input("Where's your timber? Full path (in quotes), please: ").strip('"'))
 
 reader = csv.reader(open(csv_path, 'rU'))
 lines = list(reader)
@@ -42,6 +39,9 @@ for subset in [lines[i::div_files] for i in range(div_files)]:
 		writer = csv.writer(writefile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 		writer.writerow(header_row)
 		for row in subset:
-			writer.writerow(row)
+			encoded_row=[]
+			for data in row:
+				encoded_row.append(unicode(data, errors='ignore'))
+			writer.writerow(encoded_row)
 print ""
-print "All done. Now get along. You'll find your bundle in the same directory as your original."
+print "All done. You'll find your bundle in the same directory as your original."
