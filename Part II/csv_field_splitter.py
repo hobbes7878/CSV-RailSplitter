@@ -37,13 +37,14 @@ for line in lines:
 longest=0
 
 write_list=[]
-
+key_list=[]
 
 
 for csv_dict in csv_dicts:
 	write_dict={}
 	for key in csv_dict:
-		write_dict[key]=csv_dict[key]
+		key_list.append(key)
+		write_dict[key]=unicode(csv_dict[key], errors='ignore')
 		if len(csv_dict[key])>divid:
 			if len(csv_dict[key])>longest:
 				longest = len(csv_dict[key])
@@ -51,9 +52,9 @@ for csv_dict in csv_dicts:
 			splits=int(math.ceil(len(csv_dict[key])/divid))
 			i=0
 			for split in range(splits):
-				write_dict[key+"_"+str(split+1)]=parsable[i:i+divid]
+				write_dict[key+"_"+str(split+1)]=unicode(parsable[i:i+divid], errors='ignore')
 				i+=divid
-			csv_dict[key]=""
+			write_dict[key]=""
 	write_list.append(write_dict)
 
 print longest
@@ -66,5 +67,12 @@ with open(write_path,'wb') as writefile:
 	writer=csv.DictWriter(writefile, set([key for sub_key_list in all_keys for key in sub_key_list]))
 	writer.writeheader()
 	writer.writerows(write_list)
+
+### Check ###
+for csv_dict in write_list:
+	for key in csv_dict:
+		if len(csv_dict[key])>divid:
+			print "!!!! TOO LONG !!!"+str(len(csv_dict[key]))+str(key)
+#############
 
 print "All done now."
